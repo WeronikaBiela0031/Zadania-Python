@@ -2,7 +2,7 @@ print('Zadanie 2.10.')
 napis='Przykladowy tekst do liczenia wyrazow z wyrazem GvR'
 L=napis.split()
 print(len(L))
-
+# /testfisfbiwbi
 print('Zadanie 2.11.')
 L1='slowo'
 print('_'.join(L1))
