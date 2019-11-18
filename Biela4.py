@@ -1,8 +1,10 @@
 print('Zadanie 4.2')
 print('Ad Zadanie 3.5')
 N = int(input('Podaj dlugosc miarki (liczba całkowita): '))
-#import pdb;pdb.set_trace() do programu PyCharm, działa przy Run, sprawdzanie kolejnej komendy poprzez (n Enter)
-#do programu PyCharm ctr+alt+L poprawia składniena Pythonowska
+
+
+# import pdb;pdb.set_trace() do programu PyCharm, działa przy Run, sprawdzanie kolejnej komendy poprzez (n Enter)
+# do programu PyCharm ctr+alt+L poprawia składniena Pythonowska
 
 def miarka(n):
     '''Funkcja rysująca miarkę '''
@@ -79,7 +81,7 @@ N = int(input('Podaj numer wyrazu ciągu Fibonacciego, który chcesz obliczyć: 
 def fibonacci(n):
     F = [0, 1]
     i = 2
-    fibonacci = 1
+    # fibonacci = 1
     if n == 0 or n == 1:
         return n
 
@@ -103,8 +105,8 @@ L5 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 # left-wartość elementu n-tego listy (pierwszy występujący)
 # right-wartosc elementu m-tego listy (pierwszy występujący po elemencie left)
 def odwracanie_listy_it(L, left, right):
-    n = L.index(left)
-    m = L.index(right)
+    n = left
+    m = right
     L3 = L[n:m + 1]
     L3.reverse()
     L2 = L[:n] + L3 + L[m + 1:]
@@ -120,8 +122,8 @@ input('Naciśnij Enter aby kontynuuować.')
 def odwracanie_listy_rek(L, left, right):
     # nie wiem jak rozumieć rekurencje- poprez ustalanie ze ostatni wyraz innej listy to kolejny nowej?
     j = 0
-    n = L.index(left)
-    m = L.index(right)
+    n = left
+    m = right
     L2 = L[n:m + 1]  # wycinam co chce obrócić, mogłabym nie tworzyć L1 ale to nie robi różnicy
     L22 = []  # pusta lista ktora bedzie tworzona
     while len(L2) > 0:
@@ -135,23 +137,17 @@ print(odwracanie_listy_rek(L5, 3, 8))
 
 print('Zadanie 4.6')
 input('Naciśnij Enter aby kontynuuować.')
-L6 = [1, 2, (3, 7), [4, 5, 6], 7, 8, 9, 10]
+L6 = [1, 2, (3, 7), [4, (5, 6)], 7, 8, 9, 10]
 
 
 def sum_seq(S):
     wynik = 0
-    if isinstance(S, (list, tuple)):
-        for i in S:
-            try:
-                wynik += sum(i)
-            except TypeError:
-                wynik += i
-
-        return wynik
-
-
-    else:
-        return "Argument nie jest sekwencją"
+    for i in S:
+        if not isinstance(i, (list, tuple)):
+            wynik += i
+        else:
+            sum_seq(i)
+    return wynik
 
 
 print(sum_seq(L6))
@@ -164,6 +160,9 @@ L7 = [1, (2, 3), [], [4, (5, 6, 7)], 8, [9]]
 def flatten(Sn, first=True):
     # import pdb; pdb.set_trace()
     '''Funkcja wypisująca elemanty listy zagnieżdżonej'''
+    # 1lista=[0]
+    # 2if total is none: total=[]
+    # 3 rozwiazanie z jawnym stosem
     if first:  # przy pierwszym wejsciu ma domyślną wartość, więc wchodzi w ta pętle
         flatten.lista = []  # definiuje sobie pusta "liste", dodaje to jako atrybut funkcji
     for i in Sn:
