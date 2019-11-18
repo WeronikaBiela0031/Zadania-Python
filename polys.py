@@ -114,10 +114,11 @@ class Poly:
 
     def is_zero(self):  # bool, True dla [0], [0, 0],...
         # import pdb; pdb.set_trace()
-        if any(self.a):
-            return False
-        else:
-            return True
+        return False if any(self.a) else True
+        # if any(self.a):
+        #     return False
+        # else:
+        #     return True
 
 
 # Kod testujący moduł.
