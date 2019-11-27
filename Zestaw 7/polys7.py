@@ -9,28 +9,20 @@ class Poly:
         self.size = n + 1  # rozmiar tablicy
         self.a = self.size * [0]
         self.a[self.size - 1] = c
-        self.idx = len(self.a)
-            # import pdb;
-            # pdb.set_trace()
 
+        # import pdb;
+        # pdb.set_trace()
 
-    def __iter__(self):  # typowa postać
-        return self
+    def iter_coeff(self):
+        for item in self.a:
+            yield item
 
-    # def wyjatek(self):
-    #     try:
-    #         int(self.size)
-    #         int(self.a[self.size - 1])
-    #     except (NameError, ValueError, AttributeError, TypeError):
-    #         return "Źle podany argument c lub n"
-    #     else:
-    #         return self
-
-    def next(self):
-        if self.idx == 0:
-            raise StopIteration
-        self.idx += 1
-        return self.a[self.idx]
+    def wyjatek(self):
+        if not isinstance(self.a[self.size - 1], int) or not isinstance(self.size, int):
+            raise ValueError
+            return "Źle podany argument c lub n"
+        else:
+            return self
 
     def __str__(self):
         return str(self.a)
@@ -164,8 +156,16 @@ class TestPoly(unittest.TestCase):
     def test_str(self):
         self.assertEqual(str(Poly(2, 3)), '[0, 0, 0, 2]')
         # self.assertEqual(str(self.a),"0002")
+
     # def test_wyjatek(self):
-    #     self.assertEqual(Poly('a','b').wyjatek(), "Źle podany argument c lub n")
+    #     self.assertRaises(ValueError, Poly, 2, a)
+
+    def test_iter(self):
+        i = 0
+        p = Poly(2, 3)
+        for x in p.iter_coeff():
+            self.assertEqual(x, p.a[i])
+            i += 1
 
     def test_cmp(self):
         self.assertTrue(Poly(2, 3) == Poly(2, 3))
@@ -203,7 +203,7 @@ class TestPoly(unittest.TestCase):
         self.assertTrue(Poly(0).is_zero())
         self.assertFalse(Poly(3, 4).is_zero())
 
-    def test_getiitem(self):
+    def test_getitem(self):
         self.assertEqual(Poly(3, 2).__getitem__(2), 3)
         self.assertEqual(Poly(3, 2).__getitem__(3), 0)
 

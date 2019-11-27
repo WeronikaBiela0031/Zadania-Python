@@ -10,15 +10,15 @@ class frac:
         self.x = x
         self.y = y
 
-        #Chce żeby obsługiwał floaty bez zmieniania w testach z 1 na 1.0
-        # self.x=float(x)
-        # self.y=float(y)
+        # Chce żeby obsługiwał floaty bez zmieniania w testach z 1 na 1.0
+        #Nie! bo floaty to nie wymierny
+        #self.x=float(x)
+        #self.y=float(y)
         # try: #spróbuj zmienić int z float
         #     self.x=int(self.x)
         #     self.y=int(self.y)
         # except SyntaxError: #jak nie umiesz to tego nie rób
         #     continue
-
 
     def __str__(self):
         nwd = gcd(self.x, self.y)
@@ -142,6 +142,9 @@ class TestFractions(unittest.TestCase):
     def setUp(self):
         pass
 
+    def test_init(self):
+        self.assertRaises(ZeroDivisionError, frac, 2, 0)
+
     def test_str_and_repr(self):
         self.assertEqual(str(frac(2, 3)), '2/3')
         self.assertEqual(repr(frac(2, 3)), 'frac(2, 3)')
@@ -183,7 +186,7 @@ class TestFractions(unittest.TestCase):
         self.assertEqual(frac(1, 8).frac2float(), 0.125)
 
     def test_invert(self):
-        self.assertEqual(frac(4,3).__invert__(), frac(3,4))
+        self.assertEqual(frac(4, 3).__invert__(), frac(3, 4))
 
     def tearDown(self): pass
 
