@@ -61,7 +61,7 @@ class TestStack(unittest.TestCase):
     def test_pop(self):
         self.assertEqual(self.stack.pop(), 4)
         self.assertEqual(self.stack.pop(), 3)  # sprawdzam czy pierwszy in to ostatni out
-        # self.assertRaises(ValueError, self.full.pop()) #DO POPRAWY!!!
+        self.assertRaises(ValueError, self.empty.pop())
 
     def test_is_full_or_is_empty(self):
         self.assertFalse(self.stack.is_full())
@@ -69,11 +69,10 @@ class TestStack(unittest.TestCase):
         self.assertTrue(self.full.is_full())
         self.assertTrue(self.empty.is_empty())
 
-    def tearDown(self):  # czyścimy self'a !!!
-        self.stack.items = 10 * [None]  # utworzenie tablicy
-        self.stack.n = 0  # liczba elementów na stosie
-        self.stack.size = 10
-        self.full = self.empty
+    def tearDown(self):  # czyścimy self'a
+        del self.stack  # utworzenie tablicy
+        del self.full
+        del self.empty
 
 
 print('Zadanie 10.4')
@@ -133,14 +132,15 @@ class TestQueue(unittest.TestCase):
     def test_get(self):
         self.assertEqual(self.queue.get(), 0)
         self.assertEqual(self.queue.get(), 1)
-        # self.assertRaises(ValueError, get(), self.empty ) !!!
+        self.assertRaises(ValueError, self.empty.get)
 
-    # def test_put(self): !!!
-    #     self.assertRaises(ValueError, put, 2)
+    def test_put(self):
+        self.assertRaises(ValueError, self.full.put, 2)
 
-    def tearDown(self):  # dobrze?!!
-        self.queue = Queue()
-        self.full = Queue()
+    def tearDown(self):
+        del self.queue
+        del self.full
+        del self.empty
 
 
 print('Zadanie 10.8')
@@ -189,7 +189,7 @@ class RandomQueue:
             x = self.items[self.n]
             self.items[self.n] = None
             self.items[j] = x
-        # musimy znależć sposób żeby wybrany element wsadzić na koniec i wtedy uciąć ostatni element (nie można przeidneksowywać!
+        #musimy znależć sposób żeby wybrany element wsadzić na koniec i wtedy uciąć ostatni element (nie można przeidneksowywać!
         self.n -= 1
         return data
 
@@ -199,25 +199,33 @@ class RandomQueue:
         self.size = 10
 
 
+
 randomquenue2 = RandomQueue()
 for i in range(10):
     randomquenue2.insert(i)
 
 print(randomquenue2.items)
-#
-# print(randomquenue2.remove())
-# print(randomquenue2.items)
-# print(randomquenue2.remove())
-# print(randomquenue2.items)
-# print(randomquenue2.remove())
-# print(randomquenue2.items)
-# print(randomquenue2.remove())
-# print(randomquenue2.items)
+import time
+start = time.perf_counter()
+for i in range(7):
+    randomquenue2.remove()
+end_short = time.perf_counter() - start
+print("czas trwania dla listy 10 elementowej: {}".format(end_short))
 
+randomquenue3 = RandomQueue(1000)
+for i in range(1000):
+    randomquenue3.insert(i)
 
-# import timeit
-# t1 = timeit.Timer(stmt="randomquenue2.remove()", setup="from __main__ import RandomQueue"))
-# print(t1.timeit(8))
+print(randomquenue3.items)
+
+start = time.perf_counter()
+for i in range(7):
+    randomquenue3.remove()
+end_long = time.perf_counter() - start
+print("czas trwania dla listy 1000 elementowej: {}".format(end_long))
+
+print("stosunek czasów: {}".format(end_long / end_short)) #zależność będzie niezależna od długości listy
+
 
 class TestRandomQueue(unittest.TestCase):
 
@@ -236,9 +244,9 @@ class TestRandomQueue(unittest.TestCase):
     def clear_test(self):
         self.assertTrue(self.randomquenue.clear().is_empty())
 
-    def tearDown(self): pass
-    # self.randomquenue.clear()
+    def tearDown(self):
+        del self
 
-
+#
 if __name__ == '__main__':
     unittest.main()  # uruchamia wszystkie testy
