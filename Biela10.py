@@ -16,15 +16,15 @@ class Stack:
         return self.size == self.n
 
     def push(self, data):
-        self.items[self.n] = data
-        self.n += 1
+        if self.n == self.size:
+            raise ValueError('Stos jest pełny')
+        else:
+            self.items[self.n] = data
+            self.n += 1
 
     def pop(self):
-        try:
-            if self.n == 0:
-                raise ValueError('Stos jest pusty')
-        except ValueError as e:
-            print(e)
+        if self.n == 0:
+            raise ValueError('Stos jest pusty')
         else:
             self.n -= 1
             data = self.items[self.n]
@@ -61,7 +61,7 @@ class TestStack(unittest.TestCase):
     def test_pop(self):
         self.assertEqual(self.stack.pop(), 4)
         self.assertEqual(self.stack.pop(), 3)  # sprawdzam czy pierwszy in to ostatni out
-        self.assertRaises(ValueError, self.empty.pop())
+        self.assertRaises(ValueError, self.empty.pop)
 
     def test_is_full_or_is_empty(self):
         self.assertFalse(self.stack.is_full())
@@ -176,11 +176,17 @@ class RandomQueue:
     def remove(self):
         # Uwaga- losując mieszam elementy ale celem jest wyciąganie z kolejki losowych elementów w stałym czasie.
         # Etap 1 - wyszukiwanie elementu.
-        j = random.randint(0, self.n - 1)
+        # j = random.randint(0, self.n - 1)
+        j = random.randint(0,self.n - 1)
         # wyciągnąć chce element losowy o j-tym indeksie self.items[j]
         # Etap 2 - usuwanie elementu.
         data = self.items[j]
-        if self.is_full():
+        # if j == self.n-1: #tu jest przy 10000 powtórzeń usuwania elementów stosunek czasów dla listy 10 i 1000 elemenowej 2,76
+        #     self.items.pop()
+        # else:
+        #     self.items[j] = self.items.pop()
+        # self.items.append(None)
+        if self.is_full(): #tu jest ten stosunek 1.76
             x = self.items[-1]
             self.items[-1] = self.items[j]
             self.items[j] = x
@@ -194,37 +200,42 @@ class RandomQueue:
         return data
 
     def clear(self):  # czyszczenie listy
-        self.items = 10 * [None]
-        self.n = 0  # pierwszy wolny indeks
-        self.size = 10
+        for item in self.items:
+            item = None
 
 
 
-randomquenue2 = RandomQueue()
-for i in range(10):
-    randomquenue2.insert(i)
-
-print(randomquenue2.items)
 import time
-start = time.perf_counter()
-for i in range(7):
+
+
+
+total_short = 0
+for k in range(1000):
+    randomquenue2 = RandomQueue()
+    for i in range(10):
+        randomquenue2.insert(i)
+
+    start = time.perf_counter()
     randomquenue2.remove()
-end_short = time.perf_counter() - start
-print("czas trwania dla listy 10 elementowej: {}".format(end_short))
+    end = time.perf_counter()
+    total_short = total_short + (end - start)
 
-randomquenue3 = RandomQueue(1000)
-for i in range(1000):
-    randomquenue3.insert(i)
 
-print(randomquenue3.items)
+print("czas trwania 1000-krotnego usunięcia elementu z listy 10 elementowej: {}".format(total_short))
 
-start = time.perf_counter()
-for i in range(7):
+
+
+total_long = 0
+for n in range(1000):
+    randomquenue3 = RandomQueue(1000)
+    for j in range(1000):
+        randomquenue3.insert(i)
+    start = time.perf_counter()
     randomquenue3.remove()
-end_long = time.perf_counter() - start
-print("czas trwania dla listy 1000 elementowej: {}".format(end_long))
-
-print("stosunek czasów: {}".format(end_long / end_short)) #zależność będzie niezależna od długości listy
+    end = time.perf_counter()
+    total_long = total_long + (end - start)
+print("czas trwania 1000-krotnego usunięcia elementu z listy 1000 elementowej: {}".format(total_long))
+print("stosunek czasów: {}".format(total_long / total_short)) #zależność będzie niezależna od długości listy
 
 
 class TestRandomQueue(unittest.TestCase):
