@@ -100,7 +100,7 @@ print('Zadanie 4.5')
 print('Wersja interacyjna')
 input('Naciśnij Enter aby kontynuuować.')
 L5 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-
+#4.5 Odwracanie ma być w miejscu; left i right to indeksy, a nie elementy.
 
 # left-wartość elementu n-tego listy (pierwszy występujący)
 # right-wartosc elementu m-tego listy (pierwszy występujący po elemencie left)
@@ -136,6 +136,7 @@ def odwracanie_listy_rek(L, left, right):
 print(odwracanie_listy_rek(L5, 3, 8))
 
 print('Zadanie 4.6')
+#4.6 Nie można używać sum(), bo mogą być zagnieżdżone sekwencje.
 input('Naciśnij Enter aby kontynuuować.')
 L6 = [1, 2, (3, 7), [4, (5, 6)], 7, 8, 9, 10]
 
