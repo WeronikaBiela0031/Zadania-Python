@@ -78,11 +78,20 @@ class SingleList:
         return removed
 
     def merge(self, other):  # klasy O(1)
-        if other.length != 0:
+        if self.length == 0:
+            if other.length == 0:
+                raise ValueError('puste listy')
+            else:
+                self.length = other.length  # nie trzeba obliczać za każdym razem
+                self.head = other.head
+                self.tail = other.tail
+                other.length = other.head = other.tail = None
+        if other.length != 0: #elif: pass - nie trzeba pisać
             # dajemy na koniec listy
             self.tail.next = other.head
             self.tail = other.tail
             self.length += other.length
+            other.length = other.head = other.tail = None
         return 'SingleLists merged'
 
     def clear(self):  # czyszczenie listy
@@ -131,11 +140,11 @@ class Node:
     def __str__(self):
         return str(self.data)
 
-    def traverse_stack(top, visit):
-        if top is None:
-            return
+    def traverse_stack(self, visit):
+        if self is None:
+            return 0
         stack = list()  # stos symulujemy przez listę Pythona
-        stack.append(top)
+        stack.append(self)
         while stack:
             node = stack.pop()
             visit(node)
@@ -144,12 +153,12 @@ class Node:
             if node.left:
                 stack.append(node.left)
 
-    def count_leafs(top):
-        if top is None:
-            return
+    def count_leafs(self):
+        if self is None:
+            return 0
         number_of_leafs = 0
         stack = list()  # stos symulujemy przez listę Pythona
-        stack.append(top)
+        stack.append(self)
         while stack:
             node = stack.pop()
             if node.right:
@@ -160,13 +169,13 @@ class Node:
                 number_of_leafs += 1
         return number_of_leafs
 
-    def count_total(top):
-        if top is None:
-            return
+    def count_total(self):
+        if self is None:
+            return 0
         sum_of_leafs = 0
         stack = list()  # stos symulujemy przez listę Pythona
-        stack.append(top)
-        sum_of_leafs += top.data
+        stack.append(self)
+        sum_of_leafs += self.data
         while stack:
             node = stack.pop()
             if node.right:
@@ -188,6 +197,8 @@ root.left.left = Node(4)
 root.left.right = Node(5)
 root.right.left = Node(6)
 root.right.right = Node(7)
+root.right.right.left = Node(8)
+root.right.right.right = Node(9)
 
 print(root.traverse_stack(print))
 print(root.count_leafs())
