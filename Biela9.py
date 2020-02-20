@@ -85,13 +85,16 @@ class SingleList:
                 self.length = other.length  # nie trzeba obliczać za każdym razem
                 self.head = other.head
                 self.tail = other.tail
-                other.length = other.head = other.tail = None
+                other.length = 0
+                other.head = other.tail = None
+
         if other.length != 0: #elif: pass - nie trzeba pisać
             # dajemy na koniec listy
             self.tail.next = other.head
             self.tail = other.tail
             self.length += other.length
-            other.length = other.head = other.tail = None
+            other.length = 0
+            other.head = other.tail = None
         return 'SingleLists merged'
 
     def clear(self):  # czyszczenie listy
@@ -165,7 +168,7 @@ class Node:
                 stack.append(node.right)
             if node.left:
                 stack.append(node.left)
-            else:
+            if node.left is None and node.right is None:
                 number_of_leafs += 1
         return number_of_leafs
 
